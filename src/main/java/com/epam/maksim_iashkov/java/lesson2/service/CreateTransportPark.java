@@ -24,7 +24,7 @@ public class CreateTransportPark {
         Taxi taxi3 = new Taxi(2200, 1, 3, 60, 3, 2);
 
         /*Сохранение экземпляров классов транспортных средств в массив*/
-        Transport park[] = new Transport[10];
+        Transport[] park = new Transport[10];
         park[0] = autobus1;
         park[1] = autobus2;
         park[2] = train1;

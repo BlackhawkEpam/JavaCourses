@@ -5,7 +5,6 @@ package com.epam.maksim_iashkov.java.lesson2.model;
  */
 public class Autobus extends Transport {
     private double distance;    //Пройденная автобусом дистанция
-    private int freePlace;  //Количество свободных мест в автобусе
 
     /**
      * Конструктор для экземпляров автобусов
@@ -38,13 +37,15 @@ public class Autobus extends Transport {
      * Метод для подсчета количества занятых и свободных мест - и вывода их на экран монитора в автобусе =)
      */
     public void freePlace(int passanger) {
+        //Количество свободных мест в автобусе
+        int freePlace;
         if (passanger >= getPassCapacity()) {   //Если количество пассажиров на остановке больше, чем вместимость автобуса
             freePlace = 0;
-            System.out.println("Количество свободных мест: "+freePlace);
+            System.out.println("Количество свободных мест: "+ freePlace);
             System.out.println("Количество занятых мест: "+getPassCapacity());
         } else {    //Если все пассажиры с остановки могут влезть в автобус
             freePlace = getPassCapacity() - passanger;
-            System.out.println("Количество свободных мест: "+freePlace);
+            System.out.println("Количество свободных мест: "+ freePlace);
             System.out.println("Количество занятых мест: "+passanger);
         }
     }
@@ -53,12 +54,11 @@ public class Autobus extends Transport {
      * Метод для вывода экземпляров Автобусов не в виде хэша
      */
     @Override
-    public String toString() {
-        return "Autobus{" +
-                "cost=" + getCost() +
-                ", fuelFlow=" + getFuelFlow() +
-                ", passCapacity=" + getPassCapacity() +
-                ", velocity=" + getVelocity() +
-                '}';
+    public String toString(){
+        return "Автобус. Параметры автобуса: " +
+                "Цена = " + getCost() + " руб" +
+                ", Расход топлива = " + getFuelFlow() + " л/км" +
+                ", Пассажировместимость = " + getPassCapacity() + " чел" +
+                ", Скорость = " + getVelocity() + " км/ч";
     }
 }

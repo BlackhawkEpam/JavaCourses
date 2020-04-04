@@ -12,8 +12,8 @@ public class GeneralPrice {
     public void sumOfCost(Transport[] array) {
         double price = 0.00;
 
-        for (int i = 0; i < array.length ; i++){
-            price = price + array[i].getCost();
+        for (Transport transport : array) {
+            price = price + transport.getCost();
         }
         System.out.println("Общая стоимость парка общественного транспорта: " + Math.round(price*100)/100.0 );
     }

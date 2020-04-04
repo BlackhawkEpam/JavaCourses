@@ -4,9 +4,9 @@ package com.epam.maksim_iashkov.java.lesson2.model;
  * Класс для описания такси
  */
 public class Taxi extends Transport implements Incomeable {
-    private double money;   //Плата за проезд на такси
     private double times;   //Время такси в пути
     private double acceleration;    //Развиваемое ускорение  автомобилем такси
+    private final int RATE = 200;   //Такса - почасовая ставка за проезд
 
     /**
      * Конструктор для экземпляров такси
@@ -42,7 +42,8 @@ public class Taxi extends Transport implements Incomeable {
      */
     @Override
     public double income() {
-        final int RATE = 200;   //Такса - почасовая ставка за проезд
+        //Плата за проезд на такси
+        double money;
         return money = RATE*times;
     }
 
@@ -62,11 +63,10 @@ public class Taxi extends Transport implements Incomeable {
      */
     @Override
     public String toString() {
-        return "Taxi{" +
-                "cost=" + getCost() +
-                ", fuelFlow=" + getFuelFlow() +
-                ", passCapacity=" + getPassCapacity() +
-                ", velocity=" + getVelocity() +
-                '}';
+        return "Такси. Параметры такси: " +
+                "Цена = " + getCost() + " руб" +
+                ", Расход топлива = " + getFuelFlow() + " л/км" +
+                ", Пассажировместимость = " + getPassCapacity() + " чел" +
+                ", Скорость = " + getVelocity() + " км/ч";
     }
 }

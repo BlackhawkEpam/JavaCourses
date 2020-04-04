@@ -5,7 +5,7 @@ import java.util.Scanner;
  * Класс для реализации ввода и проверок значений диапазонов поиска
  */
 public class FilterCheck {
-    Scanner scanner = new Scanner(System.in);
+    Scanner scanner = new Scanner(System.in); //Инициализация сканнера
 
     /**
      * Метод проверки минимального значения диапазона целочисленного параметра
@@ -77,5 +77,22 @@ public class FilterCheck {
             System.exit(0);
         }
         return q;
+    }
+
+    /**
+     * Метод для обработки ответа на запрос о том, будет ли пользователь фильтровать парк ТО по параметру
+     */
+    public boolean filterParam(boolean flags){
+        String implemparam; //Вводимый ответ в консоль
+        implemparam = scanner.next();
+        if (implemparam.equals("yes")) {
+            flags = false;
+        } else if (implemparam.equals("no")) {
+            flags = true;
+        } else {
+            System.out.println("Операция не определена!");
+            System.exit(0);
+        }
+        return flags;
     }
 }

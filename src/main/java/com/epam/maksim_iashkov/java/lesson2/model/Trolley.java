@@ -5,8 +5,10 @@ package com.epam.maksim_iashkov.java.lesson2.model;
  */
 public class Trolley extends Transport implements Chargeable {
     private double times;   //Время троллейбуса в пути
-    private double chargeHeat;  //Энергия, выделяющаяся при работе электрического тока в токоприемниках
     private int powers; //Мощность двигателя троллейбуса
+    private final double ENGOPERATION = 300.00;
+    private final int VOLTAGE = 220;
+    private final int AMPER = 3;
 
     /*Конструктор для троллейбусов*/
     public Trolley(double cost, int fuelFlow, int passCapacity, double velocity, double times, int powers) {
@@ -22,8 +24,8 @@ public class Trolley extends Transport implements Chargeable {
     @Override
     public double charge() {
         System.out.println("Троллейбусы не потребляют топливо, они потребляют заряд линий");
-        final int VOLTAGE = 220;
-        final int AMPER = 3;
+        //Энергия, выделяющаяся при работе электрического тока в токоприемниках
+        double chargeHeat;
         return chargeHeat = VOLTAGE*AMPER*times;
     }
 
@@ -33,8 +35,7 @@ public class Trolley extends Transport implements Chargeable {
     @Override
     public void moving() {
         System.out.println("Троллейбус перемещается вдоль линий");
-        double distance = 0.00;
-        final double ENGOPERATION = 300.00;
+        double distance;
         distance = times * getVelocity() * (1 + powers*times/(2*ENGOPERATION));
         System.out.println("Пройденная троллейбусом дистанция = "+distance);
     }
@@ -52,11 +53,10 @@ public class Trolley extends Transport implements Chargeable {
      */
     @Override
     public String toString() {
-        return "Trolley{" +
-                "cost=" + getCost() +
-                ", fuelFlow=" + getFuelFlow() +
-                ", passCapacity=" + getPassCapacity() +
-                ", velocity=" + getVelocity() +
-                '}';
+        return "Троллейбус. Параметры троллейбус: " +
+                "Цена = " + getCost() + " руб" +
+                ", Расход топлива = " + getFuelFlow() + " л/км" +
+                ", Пассажировместимость = " + getPassCapacity() + " чел" +
+                ", Скорость = " + getVelocity() + " км/ч";
     }
 }

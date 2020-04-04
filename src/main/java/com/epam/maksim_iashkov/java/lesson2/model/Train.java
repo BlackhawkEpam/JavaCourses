@@ -5,8 +5,8 @@ package com.epam.maksim_iashkov.java.lesson2.model;
  */
 public class Train extends Transport implements Chargeable, Incomeable {
     private double times;   //Время поезда в пути
-    private double chargeHeat;  //Энергия, выделяющаяся при работе электрического тока в токоприемниках
-    private double money;   //Плата за билет на поезд
+    private final int VOLTAGE = 220;
+    private final int AMPER = 5;
 
     /**
      * Конструктор для класса поездов
@@ -40,8 +40,8 @@ public class Train extends Transport implements Chargeable, Incomeable {
      */
     @Override
     public double charge() {
-        final int VOLTAGE = 220;
-        final int AMPER = 5;
+        //Энергия, выделяющаяся при работе электрического тока в токоприемниках
+        double chargeHeat;
         return chargeHeat = VOLTAGE*AMPER*times;
     }
 
@@ -50,10 +50,11 @@ public class Train extends Transport implements Chargeable, Incomeable {
      */
     @Override
     public double income() {
+        //Плата за билет на поезд
+        double money;
         if ((times*getVelocity() >= 0)&(times*getVelocity() < 1000)) {
             return money = 100.00;
-        }
-        else if ((times*getVelocity() >= 1000)&(times*getVelocity() < 3000)) {
+        } else if ((times*getVelocity() >= 1000)&(times*getVelocity() < 3000)) {
             return money = 300.00;
         } else {
             return money = 500.00;
@@ -65,11 +66,10 @@ public class Train extends Transport implements Chargeable, Incomeable {
      */
     @Override
     public String toString() {
-        return "Train{" +
-                "cost=" + getCost() +
-                ", fuelFlow=" + getFuelFlow() +
-                ", passCapacity=" + getPassCapacity() +
-                ", velocity=" + getVelocity() +
-                '}';
+        return "Поезд. Параметры поезда: " +
+                "Цена = " + getCost() + " руб" +
+                ", Расход топлива = " + getFuelFlow() + " л/км" +
+                ", Пассажировместимость = " + getPassCapacity() + " чел" +
+                ", Скорость = " + getVelocity() + " км/ч";
     }
 }

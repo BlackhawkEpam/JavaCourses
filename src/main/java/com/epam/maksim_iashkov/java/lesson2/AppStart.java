@@ -6,7 +6,7 @@ import com.epam.maksim_iashkov.java.lesson2.service.TransportSort;
 
 /**
  * Класс для реализации входной точки программы
- * @version 04.01.2020
+ * @version 01.04.2020
  * @author Maksim_Iashkov
  */
 public class AppStart {
@@ -14,13 +14,14 @@ public class AppStart {
     /**Метод main - входная точка программы*/
     public static void main(String[] args){
 
+        /*Создание экземпляров классов из пакета service*/
         CreateTransportPark createTransportPark = new CreateTransportPark();
         GeneralPrice generalPrice = new GeneralPrice();
         TransportSort transportSort = new TransportSort();
         TransportFilter transportFilter = new TransportFilter();
 
-        generalPrice.sumOfCost(createTransportPark.createPark());
-        transportSort.fuelFlowSort(createTransportPark.createPark());
-        transportFilter.filter(createTransportPark.createPark());
+        generalPrice.sumOfCost(createTransportPark.createPark());   //Подсчёт общей стоимости парка ОТ
+        transportSort.fuelFlowSort(createTransportPark.createPark());   //Сортировка парка ОТ по расходу топлива
+        transportFilter.filter(createTransportPark.createPark());   //Поиск транспорта по заданным диапазонам параметров
     }
 }

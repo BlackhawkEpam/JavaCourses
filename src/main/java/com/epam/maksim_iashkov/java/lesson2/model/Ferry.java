@@ -42,11 +42,10 @@ public class Ferry extends Transport {
      */
     @Override
     public String toString() {
-        return "Ferry{" +
-                "cost=" + getCost() +
-                ", fuelFlow=" + getFuelFlow() +
-                ", passCapacity=" + getPassCapacity() +
-                ", velocity=" + getVelocity() +
-                '}';
+        return "Паром. Параметры парома: " +
+                "Цена = " + getCost() + " руб" +
+                ", Расход топлива = " + getFuelFlow() + " л/км" +
+                ", Пассажировместимость = " + getPassCapacity() + " чел" +
+                ", Скорость = " + getVelocity() + " км/ч";
     }
 }
