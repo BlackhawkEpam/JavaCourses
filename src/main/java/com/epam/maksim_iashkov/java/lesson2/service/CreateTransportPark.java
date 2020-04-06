@@ -12,16 +12,22 @@ public class CreateTransportPark {
     public Transport[] createPark(){
 
         /*Создание экземпляров классов из пакета модели*/
-        Autobus autobus1 = new Autobus(1000, 3, 80, 50);
-        Autobus autobus2 = new Autobus(1500, 3, 90, 60);
-        Train train1 = new Train(10000, 0, 400, 100);
-        Ferry ferry1 = new Ferry(5000, 2, 100, 40);
-        Trolley trolley1 = new Trolley(1200, 0, 70, 50);
-        Trolley trolley2 = new Trolley(1300, 0, 60, 50);
-        Trolley trolley3 = new Trolley(1350, 0, 50, 50);
-        Taxi taxi1 = new Taxi(2000, 3, 3, 60);
-        Taxi taxi2 = new Taxi(2100, 4, 3, 70);
-        Taxi taxi3 = new Taxi(2200, 1, 3, 60);
+        Autobus autobus1 = new Autobus(1000, 3, 80, 50, 1000);
+        Autobus autobus2 = new Autobus(1500, 4, 90, 60, 1200);
+        Train train1 = new Train(10000, 0, 400, 100, 6, 1);
+        Ferry ferry1 = new Ferry(5000, 2, 100, 40, 5, true);
+        Trolley trolley1 = new Trolley(1200, 0, 70, 50, 110, 5);
+        Trolley trolley2 = new Trolley(1300, 0, 60, 50, 70, 4);
+        Trolley trolley3 = new Trolley(1350, 0, 50, 50, 130, 6);
+        Taxi taxi1 = new Taxi(2000, 3, 3, 60, 5, 1);
+        Taxi taxi2 = new Taxi(2100, 4, 3, 70, 4, 1.5);
+        Taxi taxi3 = new Taxi(2200, 2, 3, 60, 3, 1.75);
+
+        /*Применение методов интерфейса Repairable*/
+        taxi1.repair();
+        taxi2.repair();
+        taxi3.repair();
+        train1.repair();
 
         /*Сохранение экземпляров классов транспортных средств в массив*/
         Transport[] park = new Transport[10];
@@ -35,6 +41,12 @@ public class CreateTransportPark {
         park[7] = taxi1;
         park[8] = taxi2;
         park[9] = taxi3;
+
+        /*Вызов родительских методов для транспортных средств*/
+        for (Transport transport : park) {
+            transport.addVelocity();
+            transport.mileage();
+        }
 
         return park;
     }

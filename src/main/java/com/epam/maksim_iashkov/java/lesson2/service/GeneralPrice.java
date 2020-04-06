@@ -10,7 +10,7 @@ public class GeneralPrice {
      * Метод для подсчета суммы цен всех транспортных цен
      */
     public void sumOfCost(Transport[] array) {
-        double price = 0.00;
+        double price = 0.00;    //Инициализация общей цены парка ОТ
 
         for (Transport transport : array) {
             price = price + transport.getCost();

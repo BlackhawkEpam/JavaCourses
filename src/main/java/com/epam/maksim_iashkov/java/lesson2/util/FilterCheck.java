@@ -47,13 +47,12 @@ public class FilterCheck {
     public double checkDoubleMin(double q){
         if (scanner.hasNextDouble()) {
             q = scanner.nextDouble();
+            if (q<0) {
+                System.out.println("Значение параметра не может быть меньше нуля!");
+                System.exit(0);
+            }
         } else {
             System.out.println("Введено некорректное значение!");
-            System.exit(0);
-            return 0;
-        }
-        if (q<0) {
-            System.out.println("Значение параметра не может быть меньше нуля!");
             System.exit(0);
         }
         return q;
