@@ -6,14 +6,16 @@ package com.epam.maksim_iashkov.java.lesson2.model;
 public class Ferry extends Transport {
     private double times;   //Время пробега парома
     private boolean onstream;   //Признак того, что паром плывет по течению
+    private String names;   //Наименование парома
 
     /**
      * Конструктор для экземпляров паромов
      */
-    public Ferry(double cost, int fuelFlow, int passCapacity, double velocity, double times, boolean onstream) {
+    public Ferry(double cost, int fuelFlow, int passCapacity, double velocity, double times, boolean onstream, String names) {
         super(cost, fuelFlow, passCapacity, velocity);
         this.times = times;
         this.onstream = onstream;
+        this.names = names;
     }
 
     /**
@@ -43,6 +45,14 @@ public class Ferry extends Transport {
         }
     }
 
+    public void setNames(String names) {
+        this.names = names;
+    }   //Сеттер для переменной имени парома
+
+    public double getTimes() {
+        return times;
+    }   //Геттер для переменной имени парома
+
     /**
      * Метод для вывода экземпляров Паромов не в виде хэша
      */
@@ -52,6 +62,7 @@ public class Ferry extends Transport {
                 "Цена = " + getCost() + " руб" +
                 ", Расход топлива = " + getFuelFlow() + " л/км" +
                 ", Пассажировместимость = " + getPassCapacity() + " чел" +
-                ", Скорость = " + getVelocity() + " км/ч";
+                ", Скорость = " + getVelocity() + " км/ч" +
+                ", Название парома = " + names;
     }
 }

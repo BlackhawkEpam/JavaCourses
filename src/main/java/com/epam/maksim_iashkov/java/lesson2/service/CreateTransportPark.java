@@ -15,7 +15,7 @@ public class CreateTransportPark {
         Autobus autobus1 = new Autobus(1000, 3, 80, 50, 1000);
         Autobus autobus2 = new Autobus(1500, 4, 90, 60, 1200);
         Train train1 = new Train(10000, 0, 400, 100, 6, 1);
-        Ferry ferry1 = new Ferry(5000, 2, 100, 40, 5, true);
+        Ferry ferry1 = new Ferry(5000, 2, 100, 40, 5, true, "Снегирь");
         Trolley trolley1 = new Trolley(1200, 0, 70, 50, 110, 5);
         Trolley trolley2 = new Trolley(1300, 0, 60, 50, 70, 4);
         Trolley trolley3 = new Trolley(1350, 0, 50, 50, 130, 6);
@@ -42,12 +42,11 @@ public class CreateTransportPark {
         park[8] = taxi2;
         park[9] = taxi3;
 
-        /*Вызов родительских методов для транспортных средств*/
-        for (Transport transport : park) {
-            transport.addVelocity();
-            transport.mileage();
-        }
-
+            /*Вызов родительских методов для транспортных средств*/
+            for (Transport transport : park) {
+                transport.addVelocity();
+                transport.mileage();
+            }
         return park;
     }
 }
