@@ -1,15 +1,16 @@
 package com.epam.maksim_iashkov.java.lesson2.service;
+
 import com.epam.maksim_iashkov.java.lesson2.model.*;
 
 /**
  * Класс для создания парка общественного транспорта
  */
-public class CreateTransportPark {
+public class TransportPark {
 
     /**
      * Метод создания массива транспортных средств
      */
-    public Transport[] createPark(){
+    public static Transport[] createPark() {
 
         /*Создание экземпляров классов из пакета модели*/
         Autobus autobus1 = new Autobus(1000, 3, 80, 50, 1000);
@@ -42,11 +43,11 @@ public class CreateTransportPark {
         park[8] = taxi2;
         park[9] = taxi3;
 
-            /*Вызов родительских методов для транспортных средств*/
-            for (Transport transport : park) {
-                transport.addVelocity();
-                transport.mileage();
-            }
+        /*Вызов родительских методов для транспортных средств*/
+        for (Transport transport : park) {
+            transport.addVelocity();
+            transport.mileage();
+        }
         return park;
     }
 }
