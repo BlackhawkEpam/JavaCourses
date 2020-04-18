@@ -1,12 +1,16 @@
-package com.epam.maksim_iashkov.java.lesson2.service;
+package com.epam.maksim_iashkov.java.lesson3.service;
 
-import com.epam.maksim_iashkov.java.lesson2.exception.DivideByZeroDistanceException;
-import com.epam.maksim_iashkov.java.lesson2.exception.NotFileForAtributeException;
-import com.epam.maksim_iashkov.java.lesson2.exception.NotPosCostException;
-import com.epam.maksim_iashkov.java.lesson2.exception.NotPosVelocityException;
-import com.epam.maksim_iashkov.java.lesson2.model.*;
+import com.epam.maksim_iashkov.java.lesson3.exception.DivideByZeroDistanceException;
+import com.epam.maksim_iashkov.java.lesson3.exception.NotFileForAtributeException;
+import com.epam.maksim_iashkov.java.lesson3.exception.NotPosCostException;
+import com.epam.maksim_iashkov.java.lesson3.exception.NotPosVelocityException;
+import com.epam.maksim_iashkov.java.lesson3.model.*;
+import com.epam.maksim_iashkov.java.lesson2.model.Transport;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * Вспомогательный класс для генерации исключительных ситуаций
@@ -116,5 +120,16 @@ public class CreateTestSuiteException {
             System.out.println("Конец обработки эксепшена 2 кейса");
             System.out.println("---------------------------------------------------------------------");    //Разделитель между тест кейсами
         }
+    }
+
+    /**
+     * Массив для 5 тест-кейса
+     */
+    public Transport[] forFilter() {
+
+        Autobus gaz = new Autobus(1000, 3, 80, 50, 1000);
+        Taxi volvo = new Taxi(1500, 3, 3, 75, 5, 1);
+
+        return new Transport[]{gaz, volvo};
     }
 }

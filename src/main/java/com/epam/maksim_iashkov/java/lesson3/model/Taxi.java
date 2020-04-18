@@ -1,4 +1,9 @@
-package com.epam.maksim_iashkov.java.lesson2.model;
+package com.epam.maksim_iashkov.java.lesson3.model;
+
+import com.epam.maksim_iashkov.java.lesson3.exception.NotPosCostException;
+import com.epam.maksim_iashkov.java.lesson3.exception.NotPosVelocityException;
+import com.epam.maksim_iashkov.java.lesson2.model.Repairable;
+import com.epam.maksim_iashkov.java.lesson2.model.Transport;
 
 /**
  * Класс для описания такси
@@ -22,6 +27,10 @@ public class Taxi extends Transport implements Repairable {
      */
     @Override
     public void mileage() {
+        if (getCost() < 0)
+            throw new NotPosCostException("Цена не может быть меньше 0!", getCost());    //Генерация эксепшена - при отрицательной стоимости
+        if (getVelocity() <= 0)
+            throw new NotPosVelocityException("Скорость не может быть меньше или равна нулю!", getVelocity());  //Генерация эксепшена - при неположительной скорости
         if ((getVelocity() * times * MILE + 0.5 * acceleration * times * times * MILE) < getCost()) {
             setCost(getCost() - (getVelocity() * times * MILE + 0.5 * acceleration * times * times * MILE));
         } else {

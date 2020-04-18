@@ -1,4 +1,8 @@
-package com.epam.maksim_iashkov.java.lesson2.model;
+package com.epam.maksim_iashkov.java.lesson3.model;
+
+import com.epam.maksim_iashkov.java.lesson3.exception.NotPosCostException;
+import com.epam.maksim_iashkov.java.lesson3.exception.NotPosVelocityException;
+import com.epam.maksim_iashkov.java.lesson2.model.Transport;
 
 /**
  * Класс для описания автобусов
@@ -20,6 +24,10 @@ public class Autobus extends Transport {
      */
     @Override
     public void mileage() {
+        if (getCost() < 0)
+            throw new NotPosCostException("Цена не может быть меньше 0!", getCost());    //Генерация эксепшена - при отрицательной стоимости
+        if (getVelocity() <= 0)
+            throw new NotPosVelocityException("Скорость не может быть меньше или равна нулю!", getVelocity());  //Генерация эксепшена - при неположительной скорости
         if ((distance / getVelocity()) * TERM < getCost()) {
             setCost(getCost() - (distance / getVelocity()) * TERM);
         } else {

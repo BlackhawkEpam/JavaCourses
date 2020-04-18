@@ -1,4 +1,4 @@
-package com.epam.maksim_iashkov.java.lesson2.exception;
+package com.epam.maksim_iashkov.java.lesson3.exception;
 
 import java.io.FileNotFoundException;
 
@@ -9,7 +9,7 @@ import java.io.FileNotFoundException;
  */
 final public class NotFileForAtributeException extends FileNotFoundException {
 
-    public NotFileForAtributeException(String message){
+    public NotFileForAtributeException(String message) {
         super(message);
     }
 }

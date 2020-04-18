@@ -1,4 +1,4 @@
-package com.epam.maksim_iashkov.java.lesson2.exception;
+package com.epam.maksim_iashkov.java.lesson3.exception;
 
 /**
  * Пользовательский класс для валидации вводимой цены на отрицательные значения
@@ -7,10 +7,14 @@ package com.epam.maksim_iashkov.java.lesson2.exception;
  */
 final public class NotPosCostException extends ArithmeticException {
     private double cost;    //Валидируемая цена
-    public double getCosts(){return cost;}  //Геттер для валидируемой цены
 
-    public NotPosCostException(String message, double cost){
+    //Геттер для валидируемой цены
+    public double getCosts() {
+        return cost;
+    }
+
+    public NotPosCostException(String message, double cost) {
         super(message);
-        this.cost=cost;
+        this.cost = cost;
     }
 }
