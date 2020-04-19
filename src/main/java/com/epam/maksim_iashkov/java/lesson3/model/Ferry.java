@@ -1,4 +1,6 @@
-package com.epam.maksim_iashkov.java.lesson2.model;
+package com.epam.maksim_iashkov.java.lesson3.model;
+
+import com.epam.maksim_iashkov.java.lesson2.model.Transport;
 
 /**
  * Класс описания паромов
@@ -23,11 +25,10 @@ public class Ferry extends Transport {
      */
     @Override
     public void mileage() {
-        if ((getVelocity()*times >= 0)&&(getVelocity()*times < 1000)){
-            setCost(getCost()*0.7);
-        }
-        else if ((getVelocity()*times >= 1000)&&(getVelocity()*times < 4000)){
-            setCost(getCost()*0.4);
+        if ((getVelocity() * times >= 0) && (getVelocity() * times < 1000)) {
+            setCost(getCost() * 0.7);
+        } else if ((getVelocity() * times >= 1000) && (getVelocity() * times < 4000)) {
+            setCost(getCost() * 0.4);
         } else {
             setCost(0.00);
         }

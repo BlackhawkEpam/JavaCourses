@@ -30,14 +30,32 @@ public abstract class Transport implements Comparable<Transport>{
     public int getPassCapacity() { return passCapacity; }
     public double getVelocity() { return velocity; }
 
+    /*Блок сеттеров для параметров транспортов*/
+    public void setCost(double cost) {
+        this.cost = cost;
+    }
+
+    public void setFuelFlow(int fuelFlow) {
+        this.fuelFlow = fuelFlow;
+    }
+
+    public void setPassCapacity(int passCapacity) {
+        this.passCapacity = passCapacity;
+    }
+
+    public void setVelocity(double velocity) {
+        this.velocity = velocity;
+    }
+
+    public abstract void mileage();  //Абстрактный метод для учёта пробега
+    public abstract void addVelocity();  //Абстрактный метод разгона транспортного средства
+
     /**
      * Переопределение компаратора, использующегося в статическом методе sort
      * Для класса TransportSort
      */
     @Override
     public int compareTo(Transport o) {
-        if (fuelFlow < o.fuelFlow) return -1;
-        if (fuelFlow > o.fuelFlow) return 1;
-        return 0;
+        return Integer.compare(fuelFlow, o.fuelFlow);
     }
 }

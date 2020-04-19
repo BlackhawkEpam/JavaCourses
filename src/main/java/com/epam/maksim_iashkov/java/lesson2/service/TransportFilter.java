@@ -1,4 +1,5 @@
 package com.epam.maksim_iashkov.java.lesson2.service;
+
 import com.epam.maksim_iashkov.java.lesson2.model.Transport;
 import com.epam.maksim_iashkov.java.lesson2.util.FilterCheck;
 
@@ -6,73 +7,77 @@ import com.epam.maksim_iashkov.java.lesson2.util.FilterCheck;
  * Класс реализации поисковых фильтров для объектов-транспортов
  */
 public class TransportFilter {
-    private int count=0;    //Инициализация счетчика
-    boolean c, ff, pc, v; //Флаги, по которым будет понятно, фильтруется ли параметр
-    /*Инициализация верхних и нижних границ диапазонов*/
-    double c1 = 0.00;
-    double c2 = 0.00;
-    int ff1 = 0;
-    int ff2 = 0;
-    int pc1 = 0;
-    int pc2 = 0;
-    double v1 = 0.00;
-    double v2 = 0.00;
 
-    FilterCheck filterCheck = new FilterCheck();    //Создание экземпляра класса для ввода-проверок границ диапазонов
+    FilterCheck filterCheck = new FilterCheck();
+
+    boolean isCost;  //Признак необходимости фильтрации парка ОТ по стоимости
+    boolean isFuelFlow; //Признак необходимости фильтрации парка ОТ по расходу топлива
+    boolean isPassCapacity; //Признак необходимости фильтрации парка ОТ по пассажировместимости
+    boolean isVelocity;  //Признак необходимости фильтрации парка ОТ по скорости
+
+    /*Инициализация верхних и нижних границ диапазонов*/
+    double minCost = 0.00;   //Нижняя граница вводимой цены
+    double maxCost = 0.00;   //Верхняя граница вводимой цены
+    int minFuelFlow = 0;    //Нижняя граница вводимого расхода топлива
+    int maxFuelFlow = 0;    //Верхняя граница вводимого расхода топлива
+    int minPassCapacity = 0;    //Нижняя граница вводимой пассажировместимости
+    int maxPassCapacity = 0;    //Верхняя граница вводимой пассажировместимости
+    double minVelocity = 0.00;   //Нижняя граница вводимой скорости
+    double maxVelocity = 0.00;   //Верхняя граница вводимой скорости
 
     /**
      * Метод фильтрации транспортных средств по диапазонам параметров
      */
-    public void filter(Transport[] array){
+    public void filter(Transport[] array) {
+        int count = 0;
         System.out.println("Поиск транспорта по заданному диапазону параметров");
 
         System.out.println("Фильтровать парк ОТ по цене? yes/no");
-        c = filterCheck.filterParam(c);
-        if (!c) {
+        isCost = filterCheck.isFilterParamRequired();
+        if (isCost) {
             System.out.println("Введите минимальное значение цены транспорта: ");
-            c1 = filterCheck.checkDoubleMin(c1);
+            minCost = filterCheck.checkDoubleMin();
 
             System.out.println("Введите максимальное значение цены транспорта: ");
-            c2 = filterCheck.checkDoubleMax(c2, c1);
+            maxCost = filterCheck.checkDoubleMax(minCost);
         }
 
         System.out.println("Фильтровать парк ОТ по расходу топлива? yes/no");
-        ff = filterCheck.filterParam(ff);
-        if (!ff) {
+        isFuelFlow = filterCheck.isFilterParamRequired();
+        if (isFuelFlow) {
             System.out.println("Введите минимальное значение расхода топлива: ");
-            ff1 = filterCheck.checkIntMin(ff1);
+            minFuelFlow = filterCheck.checkIntMin();
 
             System.out.println("Введите максимальное значение расхода топлива: ");
-            ff2 = filterCheck.checkIntMax(ff2, ff1);
+            maxFuelFlow = filterCheck.checkIntMax(minFuelFlow);
         }
 
         System.out.println("Фильтровать парк ОТ по пассажировместимости? yes/no");
-        pc = filterCheck.filterParam(pc);
-        if (!pc) {
+        isPassCapacity = filterCheck.isFilterParamRequired();
+        if (isPassCapacity) {
             System.out.println("Введите минимальное значение пассажировместимости: ");
-            pc1 = filterCheck.checkIntMin(pc1);
-
+            minPassCapacity = filterCheck.checkIntMin();
             System.out.println("Введите максимальное значение пассажировместимости: ");
-            pc2 = filterCheck.checkIntMax(pc2, pc1);
+            maxPassCapacity = filterCheck.checkIntMax(minPassCapacity);
         }
 
 
         System.out.println("Фильтровать парк ОТ по скорости? yes/no");
-        v = filterCheck.filterParam(v);
-        if (!v) {
+        isVelocity = filterCheck.isFilterParamRequired();
+        if (isVelocity) {
             System.out.println("Введите минимальное значение скорости: ");
-            v1 = filterCheck.checkDoubleMin(v1);
+            minVelocity = filterCheck.checkDoubleMin();
 
             System.out.println("Введите максимальное значение скорости: ");
-            v2 = filterCheck.checkDoubleMax(v2, v1);
+            maxVelocity = filterCheck.checkDoubleMax(minVelocity);
         }
 
         /*Проверка каждого транспорта из массива на попадание в диапазоны параметров*/
         for (Transport transport : array) {
-            if (((c) || ((transport.getCost() >= c1) && (transport.getCost() <= c2))) &&
-                    ((ff) || ((transport.getFuelFlow() >= ff1) && (transport.getFuelFlow() <= ff2))) &&
-                    ((pc) || ((transport.getPassCapacity() >= pc1) && (transport.getPassCapacity() <= pc2))) &&
-                    ((v) || ((transport.getVelocity() >= v1) && (transport.getVelocity() <= v2)))) {
+            if (((!isCost) || ((transport.getCost() >= minCost) && (transport.getCost() <= maxCost))) &&
+                    ((!isFuelFlow) || ((transport.getFuelFlow() >= minFuelFlow) && (transport.getFuelFlow() <= maxFuelFlow))) &&
+                    ((!isPassCapacity) || ((transport.getPassCapacity() >= minPassCapacity) && (transport.getPassCapacity() <= maxPassCapacity))) &&
+                    ((!isVelocity) || ((transport.getVelocity() >= minVelocity) && (transport.getVelocity() <= maxVelocity)))) {
                 System.out.println("Искомый транспорт: " + transport);
                 count = count + 1;  //Счетчик количества подпадающих под фильтр транспортных средств
             }
