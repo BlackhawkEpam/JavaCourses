@@ -6,18 +6,15 @@ import java.util.Arrays;
  * Создание класса - динамического массива для 1 задачи
  */
 public class DynamicArray<E> {
-    int size;   //Задаваемый размер массива через конструктор
-    int currentSize = 0;    //Текущий размер списка элементов
+    private int currentSize = 0;    //Текущий размер списка элементов
+    private Object[] dynArray;  //Объявление динамического массива
 
     /**
      * Конструктор массива, в который передается размер и сразу присваивается размеру массива
      */
     public DynamicArray(int size) {
-        this.size = size;
         dynArray = new Object[size];
     }
-
-    private Object[] dynArray;  //Объявление динамического массива
 
     /**
      * Метод добавления элемента в конец списка динамического массива

@@ -17,10 +17,10 @@ public class AppStart {
         ArrayList<Integer> aList1;   //Коллекция для хранения нового списка только четных чисел
 
         collectionsInt.shuffleCollections(aList);    //Перемешать последовательность чисел и показать это
-        collectionsInt.checkUnic(aList);             //Показать уникальность всех элементов последовательности
+        collectionsInt.checkUnique(aList);             //Показать уникальность всех элементов последовательности
         collectionsInt.findMin(aList);               //Найти минимальный элемент последовательности
         aList1 = collectionsInt.onlyEven(aList);     //Удаление всех нечетных элементов и сохранение в другую коллекцию
-        collectionsInt.findPrelast(aList1);          //Найти предпоследний по величине элемент
+        collectionsInt.findPreLast(aList1);          //Найти предпоследний по величине элемент
 
         /*Задача 2 - выполненная на Stream API*/
         StreamAPIInt streamAPIInt = new StreamAPIInt(); //Создание экземпляра StreamAPIInt
@@ -36,6 +36,7 @@ public class AppStart {
         streamAPIInt.findPreLast(list3);                //Найти предпоследний по величине элемент
 
         /*Задача 1 - создание динамического массива*/
+
         DynamicArray<Integer> array = new DynamicArray<>(4);    //Создание массива целых чисел с размером = 4
 
         array.add(5);           //Добавление трех элементов поочередно в конец списка
