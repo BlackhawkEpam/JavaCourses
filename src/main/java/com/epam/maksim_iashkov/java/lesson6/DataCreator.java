@@ -11,10 +11,10 @@ import java.util.Scanner;
  */
 public class DataCreator {
 
-    private static final String URL = "jdbc:postgresql://127.0.0.1:5432/";              //URL для соединения с сервером
-    private static final String DB_URL = "jdbc:postgresql://127.0.0.1:5432/vepamke";    //URL соединения к созданной БД
-    private static final String USER_NAME = "postgres";                                 //Логин пользователя
-    private static final String PASSWORD = "root";                                      //Пароль пользователя
+    public static final String URL = "jdbc:postgresql://127.0.0.1:5432/";              //URL для соединения с сервером
+    public static final String DB_URL = "jdbc:postgresql://127.0.0.1:5432/vepamke";    //URL соединения к созданной БД
+    public static final String USER_NAME = "postgres";                                 //Логин пользователя
+    public static final String PASSWORD = "root";                                      //Пароль пользователя
     private static final String getUserId = "SELECT u.Id FROM Users u;";                //SELECT для метода поиска PK
     private Random random = new Random();                                               //Инициализация рандома
     private Scanner scanner = new Scanner(System.in);                                   //Инициализация сканера
@@ -31,20 +31,13 @@ public class DataCreator {
 
         System.out.println("Создание и заполнение таблиц БД VEpamke случайными данными");
 
-        /*Подключение коннекта к серверу*/
         try {
+            /*Подключение коннекта к серверу*/
             conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
             st = conn.createStatement();
-        } catch (SQLException exc) {
-            System.out.println("Не удалось установить соединение с сервером");
-            System.out.println(exc.getMessage());
-            return;
-        }
+            System.out.println("Установлено соединение с сервером СУБД");
 
-        System.out.println("Установлено соединение с сервером СУБД");
-
-        /*Проверка наличия БД vepamke на сервере, и очистка БД, если она есть*/
-        try {
+            /*Проверка наличия БД vepamke на сервере, и очистка БД, если она есть*/
             ResultSet drop_DB = st.executeQuery("SELECT datname FROM pg_database;");    //Получить список всех БД на сервере
             while (drop_DB.next()) {
                 if (drop_DB.getString(1).equals("vepamke")) {   //Если среди БД есть vepamke - удалить ее
@@ -53,25 +46,16 @@ public class DataCreator {
                     break;
                 }
             }
-        } catch (SQLException exc) {
-            System.out.println("Не удалось провести корректную проверку наличия/очистку БД VEpamke");
-            System.out.println(exc.getMessage());
-            closeSession(conn, st);
-            return;
-        }
 
-        try {
             String SQL_CreateDB = "CREATE DATABASE vepamke";    //Создание БД vepamke
             st.executeUpdate(SQL_CreateDB);
-        } catch (SQLException exc) {
-            System.out.println("Не удалось создать БД VEpamke");
-            System.out.println(exc.getMessage());
+            closeSession(conn, st);
+            System.out.println("Успешно создана БД VEpamke");
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
             closeSession(conn, st);
             return;
         }
-
-        closeSession(conn, st);
-        System.out.println("Успешно создана БД VEpamke");
 
         System.out.println("Введите что-либо для создания и заполнения таблицы Users");
         scanner.nextLine();         //Для оговоренной возможности просмотра промежуточных шагов заполнения
@@ -107,51 +91,37 @@ public class DataCreator {
         ArrayList<String> maleSurname = new ArrayList<>();      //Список мужских фамилий
         int sex;    //Пол рандомного человека, для которого будет сгенерено ФИО
 
-        /*Коннект уже к БД*/
         try {
+            /*Коннект уже к БД*/
             conn = DriverManager.getConnection(DB_URL, USER_NAME, PASSWORD);
             st = conn.createStatement();
-        } catch (SQLException exc) {
-            System.out.println("Не удалось установить соединение с сервером при попытке обратиться к БД");
-            System.out.println(exc.getMessage());
-            closeSession(conn, st);
-            return;
-        }
 
-        String SQL_CreateUsers = "CREATE TABLE Users (" +
-                "Id SERIAL PRIMARY KEY," +
-                "Name CHARACTER VARYING(30)," +
-                "Surname CHARACTER VARYING(30)," +
-                "Birthday timestamp" +
-                ")";
+            String SQL_CreateUsers = "CREATE TABLE Users (" +
+                    "Id SERIAL PRIMARY KEY," +
+                    "Name CHARACTER VARYING(30)," +
+                    "Surname CHARACTER VARYING(30)," +
+                    "Birthday timestamp" +
+                    ")";
 
-        try {
             st.executeUpdate(SQL_CreateUsers);      //Запрос на создание таблицы пользователей
-        } catch (SQLException exc) {
-            System.out.println("При создании таблицы Users произошла ошибка");
-            System.out.println(exc.getMessage());
-            closeSession(conn, st);
-            return;
-        }
 
-        /*Задание диапазона для генерации рандомных дат*/
-        minDay = (int) LocalDate.of(1980, 1, 1).toEpochDay();
-        maxDay = (int) LocalDate.of(2000, 1, 1).toEpochDay();
+            /*Задание диапазона для генерации рандомных дат*/
+            minDay = (int) LocalDate.of(1980, 1, 1).toEpochDay();
+            maxDay = (int) LocalDate.of(2000, 1, 1).toEpochDay();
 
-        addNameDirs(femaleName, femaleSurname, maleName, maleSurname);  //Заполнение списков ФИ
-
-        for (int i = 0; i < 1100; i++) {    //Генерация 1100 пользователей
-
-            long randomDay = minDay + random.nextInt(maxDay - minDay);  //Генерация рандомного дня и упаковка его в лонг-число
-            LocalDate Birthday = LocalDate.ofEpochDay(randomDay);   //Перевод лонг числа в LocalDate
-            Timestamp timestamp = Timestamp.valueOf(Birthday.atStartOfDay());   //Приведение типов из LocalDate в Timestamp
-
-            sex = random.nextInt(2);    //Генерация рандомного пола
+            addNameDirs(femaleName, femaleSurname, maleName, maleSurname);  //Заполнение списков ФИ
 
             String SQL_InsertUsers = "INSERT INTO Users (Name, Surname, Birthday) Values (?, ?, ?)";    //Инсерт-запрос с препейр-стэйтментом
+            preparedStatement = conn.prepareStatement(SQL_InsertUsers);
 
-            try {
-                preparedStatement = conn.prepareStatement(SQL_InsertUsers);
+            for (int i = 0; i < 1100; i++) {    //Генерация 1100 пользователей
+
+                long randomDay = minDay + random.nextInt(maxDay - minDay);  //Генерация рандомного дня и упаковка его в лонг-число
+                LocalDate Birthday = LocalDate.ofEpochDay(randomDay);   //Перевод лонг числа в LocalDate
+                Timestamp timestamp = Timestamp.valueOf(Birthday.atStartOfDay());   //Приведение типов из LocalDate в Timestamp
+
+                sex = random.nextInt(2);    //Генерация рандомного пола
+
                 preparedStatement.setTimestamp(3, timestamp);   //Заполнить дату
                 if (sex == 1) {     //Если переменная пола = 1 - заполнить ФИ женскими значениями из списка
                     preparedStatement.setString(1, femaleName.get(random.nextInt(femaleName.size())));
@@ -160,18 +130,16 @@ public class DataCreator {
                     preparedStatement.setString(1, maleName.get(random.nextInt(maleName.size())));
                     preparedStatement.setString(2, maleSurname.get(random.nextInt(maleSurname.size())));
                 }
-                preparedStatement.executeUpdate();  //Выполнение инсерта
-            } catch (SQLException exc) {
-                System.out.println("При заполнении таблицы Users произошла ошибка!");
-                System.out.println(exc.getMessage());
-                closePrepStat(preparedStatement);
-                closeSession(conn, st);
-                return;
+                preparedStatement.addBatch();   //Добавляем i-ый инсерт в батч-пакет
             }
+            preparedStatement.executeBatch();   //Отправляем собранный батч-пакет в БД одной транзакцией на исполнение
+            preparedStatement.close();          //Закрываем preparedStatement
+            closeSession(conn, st);
+            System.out.println("Таблица Users успешно создана и заполнена данными");
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            closeSession(conn, st);
         }
-        closePrepStat(preparedStatement);
-        closeSession(conn, st);
-        System.out.println("Таблица Users успешно создана и заполнена данными");
     }
 
     /**
@@ -187,68 +155,51 @@ public class DataCreator {
         try {
             conn = DriverManager.getConnection(DB_URL, USER_NAME, PASSWORD);
             st = conn.createStatement();
-        } catch (SQLException exc) {
-            System.out.println("Не удалось установить соединение с сервером при попытке обратиться к БД");
-            System.out.println(exc.getMessage());
-            closeSession(conn, st);
-            return;
-        }
 
-        getPrimaryKey(user_id, getUserId);  //Сделать селект к таблице Users и получить список ключей оттуда
+            getPrimaryKey(user_id, getUserId);  //Сделать селект к таблице Users и получить список ключей оттуда
 
-        /*Если PK в таблице пользаков нет - то и некому дружить =) */
-        if (user_id.size() == 0) {
-            System.out.println("Список первичных ключей таблицы Users пуст!");
-            return;
-        }
+            /*Если PK в таблице пользаков нет - то и некому дружить =) */
+            if (user_id.size() == 0) {
+                System.out.println("Список первичных ключей таблицы Users пуст!");
+                return;
+            }
 
-        String SQL_CreateFriendships = "CREATE TABLE Friendships (" +
-                "Userid1 INTEGER," +
-                "Userid2 INTEGER," +
-                "Timestamp timestamp," +
-                "FOREIGN KEY (Userid1) REFERENCES Users (id)," +
-                "FOREIGN KEY (Userid2) REFERENCES Users (id)" +
-                ")";
+            String SQL_CreateFriendships = "CREATE TABLE Friendships (" +
+                    "Userid1 INTEGER," +
+                    "Userid2 INTEGER," +
+                    "Timestamp timestamp," +
+                    "FOREIGN KEY (Userid1) REFERENCES Users (id)," +
+                    "FOREIGN KEY (Userid2) REFERENCES Users (id)" +
+                    ")";
 
-        try {
             st.executeUpdate(SQL_CreateFriendships);
-        } catch (SQLException exc) {
-            System.out.println("При создании таблицы Friendships произошла ошибка");
-            System.out.println(exc.getMessage());
-            closeSession(conn, st);
-            return;
-        }
 
-        minDay = (int) LocalDate.of(2010, 1, 1).toEpochDay();
-        maxDay = (int) LocalDate.of(2015, 4, 15).toEpochDay();
-
-        for (int i = 0; i < 85000; i++) {   //Создание 85000 заявок в друзья
-
-            addFsId(user_id, fsId1, fsId2, i);          //Генерация 85000 пар айдишников друзей
-
-            long randomDay = minDay + random.nextInt(maxDay - minDay);
-            LocalDate Birthday = LocalDate.ofEpochDay(randomDay);
-            Timestamp timestamp = Timestamp.valueOf(Birthday.atStartOfDay());
+            minDay = (int) LocalDate.of(2010, 1, 1).toEpochDay();
+            maxDay = (int) LocalDate.of(2015, 4, 15).toEpochDay();
 
             String SQL_InsertFriendships = "INSERT INTO Friendships (userid1, userid2, Timestamp) Values (?, ?, ?)";
+            preparedStatement = conn.prepareStatement(SQL_InsertFriendships);
 
-            try {
-                preparedStatement = conn.prepareStatement(SQL_InsertFriendships);
+            for (int i = 0; i < 85000; i++) {   //Создание 85000 заявок в друзья
+
+                addFsId(user_id, fsId1, fsId2, i);          //Генерация 85000 пар айдишников друзей
+
+                long randomDay = minDay + random.nextInt(maxDay - minDay);
+                LocalDate Birthday = LocalDate.ofEpochDay(randomDay);
+                Timestamp timestamp = Timestamp.valueOf(Birthday.atStartOfDay());
+
                 preparedStatement.setTimestamp(3, timestamp);
                 preparedStatement.setInt(1, fsId1.get(i));
                 preparedStatement.setInt(2, fsId2.get(i));
                 preparedStatement.executeUpdate();
-            } catch (SQLException exc) {
-                System.out.println("При заполнении таблицы Friendships произошла ошибка!");
-                System.out.println(exc.getMessage());
-                closePrepStat(preparedStatement);
-                closeSession(conn, st);
-                return;
             }
+            preparedStatement.close();
+            closeSession(conn, st);
+            System.out.println("Таблица Friendships успешно создана и заполнена данными");
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            closeSession(conn, st);
         }
-        closePrepStat(preparedStatement);
-        closeSession(conn, st);
-        System.out.println("Таблица Friendships успешно создана и заполнена данными");
     }
 
     /**
@@ -261,67 +212,50 @@ public class DataCreator {
         try {
             conn = DriverManager.getConnection(DB_URL, USER_NAME, PASSWORD);
             st = conn.createStatement();
-        } catch (SQLException exc) {
-            System.out.println("Не удалось установить соединение с сервером при попытке обратиться к БД");
-            System.out.println(exc.getMessage());
-            closeSession(conn, st);
-            return;
-        }
 
-        /*Логика метода и проверки - полностью аналогична вышеописанному методу*/
-        getPrimaryKey(user_id, getUserId);
-        if (user_id.size() == 0) {
-            System.out.println("Список первичных ключей таблицы Users пуст!");
-            return;
-        }
+            /*Логика метода и проверки - полностью аналогична вышеописанному методу*/
+            getPrimaryKey(user_id, getUserId);
+            if (user_id.size() == 0) {
+                System.out.println("Список первичных ключей таблицы Users пуст!");
+                return;
+            }
 
-        addTextDirs(textPost);  //Заполнения списка тестов для постов
+            addTextDirs(textPost);  //Заполнения списка тестов для постов
 
-        String SQL_CreatePosts = "CREATE TABLE Posts (" +
-                "Id SERIAL PRIMARY KEY," +
-                "Userid INTEGER," +
-                "Text CHARACTER VARYING(30)," +
-                "Timestamp timestamp," +
-                "FOREIGN KEY (Userid) REFERENCES Users (Id)" +
-                ")";
+            String SQL_CreatePosts = "CREATE TABLE Posts (" +
+                    "Id SERIAL PRIMARY KEY," +
+                    "Userid INTEGER," +
+                    "Text CHARACTER VARYING(30)," +
+                    "Timestamp timestamp," +
+                    "FOREIGN KEY (Userid) REFERENCES Users (Id)" +
+                    ")";
 
-        try {
             st.executeUpdate(SQL_CreatePosts);
-        } catch (SQLException exc) {
-            System.out.println("При создании таблицы Posts произошла ошибка");
-            System.out.println(exc.getMessage());
-            closeSession(conn, st);
-            return;
-        }
 
-        minDay = (int) LocalDate.of(2013, 1, 1).toEpochDay();
-        maxDay = (int) LocalDate.of(2014, 1, 1).toEpochDay();
-
-        for (int i = 0; i < 91000; i++) {       //Генерация 91000 постов
-
-            long randomDay = minDay + random.nextInt(maxDay - minDay);
-            LocalDate Birthday = LocalDate.ofEpochDay(randomDay);
-            Timestamp timestamp = Timestamp.valueOf(Birthday.atStartOfDay());
+            minDay = (int) LocalDate.of(2013, 1, 1).toEpochDay();
+            maxDay = (int) LocalDate.of(2014, 1, 1).toEpochDay();
 
             String SQL_InsertPosts = "INSERT INTO Posts (Userid, Text, Timestamp) Values (?, ?, ?)";
+            preparedStatement = conn.prepareStatement(SQL_InsertPosts);
 
-            try {
-                preparedStatement = conn.prepareStatement(SQL_InsertPosts);
+            for (int i = 0; i < 91000; i++) {       //Генерация 91000 постов
+
+                long randomDay = minDay + random.nextInt(maxDay - minDay);
+                LocalDate Birthday = LocalDate.ofEpochDay(randomDay);
+                Timestamp timestamp = Timestamp.valueOf(Birthday.atStartOfDay());
+
                 preparedStatement.setInt(1, (user_id.get(random.nextInt(user_id.size()))));
                 preparedStatement.setString(2, textPost.get(random.nextInt(textPost.size())));
                 preparedStatement.setTimestamp(3, timestamp);
                 preparedStatement.executeUpdate();
-            } catch (SQLException ex) {
-                System.out.println("При заполнении таблицы Posts произошла ошибка!");
-                System.out.println(ex.getMessage());
-                closePrepStat(preparedStatement);
-                closeSession(conn, st);
-                return;
             }
+            preparedStatement.close();
+            closeSession(conn, st);
+            System.out.println("Таблица Posts успешно создана и заполнена данными");
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            closeSession(conn, st);
         }
-        closePrepStat(preparedStatement);
-        closeSession(conn, st);
-        System.out.println("Таблица Posts успешно создана и заполнена данными");
     }
 
     /**
@@ -334,73 +268,56 @@ public class DataCreator {
         try {
             conn = DriverManager.getConnection(DB_URL, USER_NAME, PASSWORD);
             st = conn.createStatement();
-        } catch (SQLException exc) {
-            System.out.println("Не удалось установить соединение с сервером при попытке обратиться к БД");
-            System.out.println(exc.getMessage());
-            closeSession(conn, st);
-            return;
-        }
 
-        /*Логика - аналогична описанному в методе createFriendships*/
-        getPrimaryKey(user_id, getUserId);
-        if (user_id.size() == 0) {
-            System.out.println("Список первичных ключей таблицы Users пуст!");
-            return;
-        }
+            /*Логика - аналогична описанному в методе createFriendships*/
+            getPrimaryKey(user_id, getUserId);
+            if (user_id.size() == 0) {
+                System.out.println("Список первичных ключей таблицы Users пуст!");
+                return;
+            }
 
-        /*Получение айди-праймари кеев из таблицы постов и проверка, что их не 0 - иначе нечему ставить лайки*/
-        String getPostId = "SELECT p.Id FROM Posts p;";
-        getPrimaryKey(post_id, getPostId);
-        if (post_id.size() == 0) {
-            System.out.println("Список первичных ключей таблицы Posts пуст!");
-            return;
-        }
+            /*Получение айди-праймари кеев из таблицы постов и проверка, что их не 0 - иначе нечему ставить лайки*/
+            String getPostId = "SELECT p.Id FROM Posts p;";
+            getPrimaryKey(post_id, getPostId);
+            if (post_id.size() == 0) {
+                System.out.println("Список первичных ключей таблицы Posts пуст!");
+                return;
+            }
 
-        String SQL_CreateLikes = "CREATE TABLE Likes (" +
-                "Postid INTEGER," +
-                "Userid INTEGER," +
-                "Timestamp timestamp," +
-                "FOREIGN KEY (Postid) REFERENCES Posts (Id)," +
-                "FOREIGN KEY (Userid) REFERENCES Users (Id)" +
-                ")";
+            String SQL_CreateLikes = "CREATE TABLE Likes (" +
+                    "Postid INTEGER," +
+                    "Userid INTEGER," +
+                    "Timestamp timestamp," +
+                    "FOREIGN KEY (Postid) REFERENCES Posts (Id)," +
+                    "FOREIGN KEY (Userid) REFERENCES Users (Id)" +
+                    ")";
 
-        try {
             st.executeUpdate(SQL_CreateLikes);
-        } catch (SQLException exc) {
-            System.out.println("При создании таблицы Likes произошла ошибка");
-            System.out.println(exc.getMessage());
-            closeSession(conn, st);
-            return;
-        }
 
-        minDay = (int) LocalDate.of(2015, 1, 1).toEpochDay();
-        maxDay = (int) LocalDate.of(2015, 12, 31).toEpochDay();
-
-        for (int i = 0; i < 310000; i++) {      //Генерация 310000 лайков
-
-            long randomDay = minDay + random.nextInt(maxDay - minDay);
-            LocalDate Birthday = LocalDate.ofEpochDay(randomDay);
-            Timestamp timestamp = Timestamp.valueOf(Birthday.atStartOfDay());
+            minDay = (int) LocalDate.of(2015, 1, 1).toEpochDay();
+            maxDay = (int) LocalDate.of(2015, 12, 31).toEpochDay();
 
             String SQL_InsertLikes = "INSERT INTO Likes (Postid, Userid, Timestamp) Values (?, ?, ?)";
+            preparedStatement = conn.prepareStatement(SQL_InsertLikes);
 
-            try {
-                preparedStatement = conn.prepareStatement(SQL_InsertLikes);
+            for (int i = 0; i < 310000; i++) {      //Генерация 310000 лайков
+
+                long randomDay = minDay + random.nextInt(maxDay - minDay);
+                LocalDate Birthday = LocalDate.ofEpochDay(randomDay);
+                Timestamp timestamp = Timestamp.valueOf(Birthday.atStartOfDay());
+
                 preparedStatement.setInt(1, (post_id.get(random.nextInt(post_id.size()))));
                 preparedStatement.setInt(2, (user_id.get(random.nextInt(user_id.size()))));
                 preparedStatement.setTimestamp(3, timestamp);
                 preparedStatement.executeUpdate();
-            } catch (SQLException exc) {
-                System.out.println("При заполнении таблицы Likes произошла ошибка!");
-                System.out.println(exc.getMessage());
-                closePrepStat(preparedStatement);
-                closeSession(conn, st);
-                return;
             }
+            preparedStatement.close();
+            closeSession(conn, st);
+            System.out.println("Таблица Likes успешно создана и заполнена данными");
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            closeSession(conn, st);
         }
-        closePrepStat(preparedStatement);
-        closeSession(conn, st);
-        System.out.println("Таблица Likes успешно создана и заполнена данными");
     }
 
     /**
@@ -474,7 +391,6 @@ public class DataCreator {
      * Метод заполнения пары id друзей в списки
      */
     public void addFsId(ArrayList<Integer> User_id, ArrayList<Integer> FsId1, ArrayList<Integer> FsId2, int i) {
-
         FsId1.add(User_id.get(random.nextInt(User_id.size())));
         FsId2.add(User_id.get(random.nextInt(User_id.size())));
         if (FsId1.get(i).equals(FsId2.get(i))) {    //Проверяем, что не сгерились два одинаковых числа - человек сам с собой дружить не может
@@ -488,24 +404,14 @@ public class DataCreator {
      * Метод для закрытия переменных коннекта и сессии - и обработка исключений
      */
     public static void closeSession(Connection conn, Statement st) {
-        try {
-            conn.close();
-            st.close();
-        } catch (SQLException ex) {
-            System.out.println("Не удалось осуществить корректное закрытие соединения с сервером!");
-            System.out.println(ex.getMessage());
-        }
-    }
-
-    /**
-     * Метод, аналогичный вышеописанному - только для preparedStatement
-     */
-    public static void closePrepStat(PreparedStatement preparedStatement) {
-        try {
-            preparedStatement.close();
-        } catch (SQLException ex) {
-            System.out.println("В процессе закрытия соединения возникла ошибка");
-            System.out.println(ex.getMessage());
+        if (conn != null) {
+            try {
+                conn.close();
+                st.close();
+            } catch (SQLException ex) {
+                System.out.println("Не удалось осуществить корректное закрытие соединения с сервером!");
+                System.out.println(ex.getMessage());
+            }
         }
     }
 
@@ -516,7 +422,6 @@ public class DataCreator {
         try {
             conn = DriverManager.getConnection(DB_URL, USER_NAME, PASSWORD);
             st = conn.createStatement();
-
             ResultSet queryResult = st.executeQuery(querySQL);
             while (queryResult.next()) {
                 listPK.add(queryResult.getInt(1));
