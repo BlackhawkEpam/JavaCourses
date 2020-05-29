@@ -1,9 +1,10 @@
 package com.epam.maksim_iashkov.java.lesson7;
 
+import com.epam.maksim_iashkov.java.lesson7.model.Transport;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -18,13 +19,13 @@ public class AnnotationParser {
 
         System.out.println("Объект: " + transport);   //Показать переданный объект
         Class<?> objClass = transport.getClass();   //Получить непосредственный класс объекта
-        ArrayList<Annotation> listAnn = new ArrayList<>(Arrays.asList(objClass.getAnnotations()));  //Для класса получить список аннотаций
+        Annotation[] annotations = objClass.getAnnotations();   //Для класса получить список аннотаций
 
         /*Обработчик аннотаций класса*/
-        for (Annotation annotation : listAnn) {
-            if (annotation.annotationType().getSimpleName().equals("IsTransport")) {
+        for (Annotation ann : annotations) {
+            if (ann.annotationType().getSimpleName().equals("IsTransport")) {
                 isTransport(transport);     //Если в классе присутствует аннотация @IsTransport - вызвать метод isTransport()
-            } else if (annotation.annotationType().getSimpleName().equals("WithSerialize")) {
+            } else if (ann.annotationType().getSimpleName().equals("WithSerialize")) {
                 withSerialize(transport);   //Если в классе присутствует аннотация @WithSerialize - вызвать метод withSerialize()
             }
         }
@@ -61,7 +62,7 @@ public class AnnotationParser {
      * Метод обработки аннотации @IsTransport
      */
     public void isTransport(Object transport) {
-        if (!(transport.getClass().getSuperclass().getSimpleName().equals("Transport"))) {
+        if (!(transport instanceof Transport)) {
             //Если родительский класс не равен "Transport" - выводим ворнинг
             System.out.println("WARN: Абстрактный класс экземпляра должен быть = Transport!");
         }
