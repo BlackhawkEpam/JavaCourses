@@ -430,6 +430,7 @@ public class DataCreator {
         } catch (SQLException ex) {
             System.out.println("При попытке считать табличные Primary key произошла ошибка!");
             System.out.println(ex.getMessage());
+            System.out.println(ex.getStackTrace());
             closeSession(conn, st);
         }
     }
